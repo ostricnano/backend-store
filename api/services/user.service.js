@@ -11,16 +11,6 @@ const { models } = require('./../libs/sequelize');
 
 class UserService {
   constructor() {}
-  // generate() {
-  //   const limit =  10;
-  //   for (let i = 0; i < limit; i++) {
-  //     this.users.push({
-  //       id: faker.string.uuid(),
-  //       name: faker.person.fullName(),
-  //       email: faker.internet.email(),
-  //     });
-  //   }
-  // }
 
   async create(data) {
     const newUser = await models.User.create(data);
@@ -28,12 +18,17 @@ class UserService {
   }
 
   async find() {
-    const users = await models.User.findAll();
+    const users = await models.User.findAll({
+      include: ['customer']
+    });
     return users;
   }
 
   async findOne(id) {
     const user = this.findOne(id);
+    if(!user) {
+      throw boom.notFound('user not found');
+    }
     return user;
   }
 
