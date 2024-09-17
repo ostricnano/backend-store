@@ -9,13 +9,12 @@ const PASSWORD = encodeURIComponent(config.dbPassword);
 
 //se crea la URI de la base de datos
 const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
-
+console.log(URI);
 const sequelize = new Sequelize(URI,{
     dialect: 'postgres',
-    logging: true,
+    logging: false,
 });
 
 setupModels(sequelize);
-sequelize.sync()
 
 module.exports = sequelize;
