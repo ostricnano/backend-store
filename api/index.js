@@ -26,9 +26,10 @@ app.use(cors());
 //   },
 // };
 // app.use(cors(options));
+require('./utils/auth')
 
 app.get('api/', (req, res) => {
-  res.send('Hello World!'); 
+  res.send('Hello World!');
 });
 routerApi(app);
 

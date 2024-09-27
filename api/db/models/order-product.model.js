@@ -41,7 +41,7 @@ const OrderProductSchema = {
   },
   quantity: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: true
   }
 };
 

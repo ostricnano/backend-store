@@ -24,14 +24,14 @@ const CustomerSchema = {
     type: DataTypes.STRING
   },
   createdAt: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.DATE,
     field: 'create_at',
     defaultValue: Sequelize.NOW
   },
   userId: {
     field: 'user_id',
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.INTEGER,
     unique: true,
     references: {

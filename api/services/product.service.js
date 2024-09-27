@@ -49,7 +49,7 @@ class ProductService {
   }
 
   async update(id, changes) {
-    const product = this.findOne(id);
+    const product = await this.findOne(id);
     const updatedProduct = await product.update(changes);
     return updatedProduct;
   }

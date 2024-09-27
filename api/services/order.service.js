@@ -6,6 +6,7 @@ class OrderService {
 
   async create(data) {
     const newOrder = await models.Order.create(data);
+    console.log(newOrder,'aaaaaaa');
     return newOrder;
   }
   async addItem(data) {
@@ -33,6 +34,21 @@ class OrderService {
       throw boom.notFound('order not found');
     }
     return order;
+  }
+
+  async finByUser (userId) {
+    const orders = await models.Order.findAll({
+      where: {
+        '$customer.user.id$': userId
+      },
+      include: [
+        {
+          association: 'customer',
+          include: ['user']
+        },
+      ]
+    })
+    return orders;
   }
 
   async update(id, changes) {

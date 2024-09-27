@@ -1,19 +1,18 @@
-//const { faker } = require('@faker-js/faker');
 const boom = require('@hapi/boom');
 
-//estas dos no hacen falta porque lo gestiona sequelize
-//const getConnection = require('../libs/postgres');
-
-// no hace falta incializar el contrusctos con this.pool = pool
-// const pool = require('../libs/postgres.pool');
-
 const { models } = require('./../libs/sequelize');
+const bcriypt = require('bcrypt');
 
 class UserService {
   constructor() {}
 
   async create(data) {
-    const newUser = await models.User.create(data);
+    const hash = await bcriypt.hash(data.password, 10);
+    const newUser = await models.User.create({
+      ...data,
+      password: hash
+    });
+    delete newUser.dataValues.password;
     return newUser;
   }
 
@@ -25,7 +24,19 @@ class UserService {
   }
 
   async findOne(id) {
-    const user = this.findOne(id);
+    const user = await models.User.findByPk(id,{
+      include: ['customer']
+    });
+    if(!user) {
+      throw boom.notFound('user not found');
+    }
+    return user;
+  }
+
+  async findByEmail(email) {
+    const user = await models.User.findOne({
+      where : { email },
+    });
     if(!user) {
       throw boom.notFound('user not found');
     }
@@ -33,13 +44,13 @@ class UserService {
   }
 
   async update(id, changes) {
-    const user = this.findOne(id);
+    const user = await this.findOne(id);
     const updatedUser = await user.update(changes);
     return updatedUser;
   }
 
   async delete(id) {
-    const user = this.findOne(id);
+    const user = await this.findOne(id);
     await user.destroy();
     return { id };
   }

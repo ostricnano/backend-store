@@ -26,9 +26,9 @@ const OrderSchema = {
     defaultValue: Sequelize.NOW,
   },
   total: {
-    type: DataTypes.VIRTUAL,
+    type: DataTypes.INTEGER,
     get() {
-      if(this.items.length > 0) {
+      if(this.items && this.item.length > 0) {
         return this.items.reduce((acc, item) => {
           return acc + (item.price * item.OrderProduct.quantity);
         }, 0);
